@@ -1,0 +1,12 @@
+The nftables framework uses tables to store chains. The chains contain individual rules for performing actions.
+A table in nftables is a namespace that contains a collection of chains, rules, sets, and other objects. 
+
+Each table must have an address family assigned. The address family defines the packet types that this table processes. 
+We can set one of the following address families when we create a table:
+
+    ip: Matches only IPv4 packets. This is the default if you do not specify an address family.
+    ip6: Matches only IPv6 packets.
+    inet: Matches both IPv4 and IPv6 packets.
+    arp: Matches IPv4 address resolution protocol (ARP) packets.
+    bridge: Matches packets that pass through a bridge device.
+    netdev: Matches packets from ingress. 
