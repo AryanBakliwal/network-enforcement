@@ -1,0 +1,61 @@
+=========================== BPF-LSM Network Hooks ===========================
+
+LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *other,
+	 struct sock *newsk)
+LSM_HOOK(int, 0, unix_may_send, struct socket *sock, struct socket *other)
+LSM_HOOK(int, 0, socket_create, int family, int type, int protocol, int kern)
+LSM_HOOK(int, 0, socket_post_create, struct socket *sock, int family, int type,
+	 int protocol, int kern)
+LSM_HOOK(int, 0, socket_socketpair, struct socket *socka, struct socket *sockb)
+LSM_HOOK(int, 0, socket_bind, struct socket *sock, struct sockaddr *address,
+	 int addrlen)
+LSM_HOOK(int, 0, socket_connect, struct socket *sock, struct sockaddr *address,
+	 int addrlen)
+LSM_HOOK(int, 0, socket_listen, struct socket *sock, int backlog)
+LSM_HOOK(int, 0, socket_accept, struct socket *sock, struct socket *newsock)
+LSM_HOOK(int, 0, socket_sendmsg, struct socket *sock, struct msghdr *msg,
+	 int size)
+LSM_HOOK(int, 0, socket_recvmsg, struct socket *sock, struct msghdr *msg,
+	 int size, int flags)
+LSM_HOOK(int, 0, socket_getsockname, struct socket *sock)
+LSM_HOOK(int, 0, socket_getpeername, struct socket *sock)
+LSM_HOOK(int, 0, socket_getsockopt, struct socket *sock, int level, int optname)
+LSM_HOOK(int, 0, socket_setsockopt, struct socket *sock, int level, int optname)
+LSM_HOOK(int, 0, socket_shutdown, struct socket *sock, int how)
+LSM_HOOK(int, 0, socket_sock_rcv_skb, struct sock *sk, struct sk_buff *skb)
+LSM_HOOK(int, -ENOPROTOOPT, socket_getpeersec_stream, struct socket *sock,
+	 sockptr_t optval, sockptr_t optlen, unsigned int len)
+LSM_HOOK(int, -ENOPROTOOPT, socket_getpeersec_dgram, struct socket *sock,
+	 struct sk_buff *skb, u32 *secid)
+LSM_HOOK(int, 0, sk_alloc_security, struct sock *sk, int family, gfp_t priority)
+LSM_HOOK(void, LSM_RET_VOID, sk_free_security, struct sock *sk)
+LSM_HOOK(void, LSM_RET_VOID, sk_clone_security, const struct sock *sk,
+	 struct sock *newsk)
+LSM_HOOK(void, LSM_RET_VOID, sk_getsecid, const struct sock *sk, u32 *secid)
+LSM_HOOK(void, LSM_RET_VOID, sock_graft, struct sock *sk, struct socket *parent)
+LSM_HOOK(int, 0, inet_conn_request, const struct sock *sk, struct sk_buff *skb,
+	 struct request_sock *req)
+LSM_HOOK(void, LSM_RET_VOID, inet_csk_clone, struct sock *newsk,
+	 const struct request_sock *req)
+LSM_HOOK(void, LSM_RET_VOID, inet_conn_established, struct sock *sk,
+	 struct sk_buff *skb)
+LSM_HOOK(int, 0, secmark_relabel_packet, u32 secid)
+LSM_HOOK(void, LSM_RET_VOID, secmark_refcount_inc, void)
+LSM_HOOK(void, LSM_RET_VOID, secmark_refcount_dec, void)
+LSM_HOOK(void, LSM_RET_VOID, req_classify_flow, const struct request_sock *req,
+	 struct flowi_common *flic)
+LSM_HOOK(int, 0, tun_dev_alloc_security, void **security)
+LSM_HOOK(void, LSM_RET_VOID, tun_dev_free_security, void *security)
+LSM_HOOK(int, 0, tun_dev_create, void)
+LSM_HOOK(int, 0, tun_dev_attach_queue, void *security)
+LSM_HOOK(int, 0, tun_dev_attach, struct sock *sk, void *security)
+LSM_HOOK(int, 0, tun_dev_open, void *security)
+LSM_HOOK(int, 0, sctp_assoc_request, struct sctp_association *asoc,
+	 struct sk_buff *skb)
+LSM_HOOK(int, 0, sctp_bind_connect, struct sock *sk, int optname,
+	 struct sockaddr *address, int addrlen)
+LSM_HOOK(void, LSM_RET_VOID, sctp_sk_clone, struct sctp_association *asoc,
+	 struct sock *sk, struct sock *newsk)
+LSM_HOOK(int, 0, sctp_assoc_established, struct sctp_association *asoc,
+	 struct sk_buff *skb)
+LSM_HOOK(int, 0, mptcp_add_subflow, struct sock *sk, struct sock *ssk)
