@@ -1,5 +1,7 @@
 The nftables framework uses tables to store chains. The chains contain individual rules for performing actions.
-A table in nftables is a namespace that contains a collection of chains, rules, sets, and other objects. 
+    Table: A container for chains; can contain multiple chains.
+    Chain: A list of rules; processes packets when they match certain conditions.
+    Rule: Defines conditions and actions to take (like accept, drop, etc.).
 
 Each table must have an address family assigned. The address family defines the packet types that this table processes. 
 We can set one of the following address families when we create a table:
@@ -9,4 +11,32 @@ We can set one of the following address families when we create a table:
     inet: Matches both IPv4 and IPv6 packets.
     arp: Matches IPv4 address resolution protocol (ARP) packets.
     bridge: Matches packets that pass through a bridge device.
-    netdev: Matches packets from ingress. 
+    netdev: Matches packets from ingress.
+
+Example:
+    table <table_address_family> <table_name> {
+        chain <chain_name> {
+            type <type> hook <hook> priority <priority>
+            policy <policy> ;
+        }
+    }
+
+Chain types: Overview, with which address families and hooks we can use them.
+
+Type	              Address families	          Hooks	            Description
+---------------------------------------------------------------------------------------
+filter                      all                    all              Standard chain type
+
+nat                     ip, ip6, inet       prerouting, input, 
+                                           output, postrouting      Chains of this type perform native address translation based on connection tracking entries. Only the first packet traverses this chain type.
+
+route                     ip, ip6                 output            Accepted packets that traverse this chain type cause a new route lookup if relevant parts of the IP header have changed. 
+
+
+Chain priorities: Specifies the order in which packets traverse chains with the same hook value
+
+Chain policies: Whether to accept (default) or drop packets if rules in this chain do not specify any action
+
+
+https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/getting-started-with-nftables_configuring-and-managing-networking
+https://wafatech.sa/blog/linux/linux-security/mastering-nftables-a-step-by-step-guide-to-setting-up-your-linux-server-firewall/
