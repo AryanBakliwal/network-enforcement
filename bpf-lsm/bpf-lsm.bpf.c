@@ -23,6 +23,7 @@ int BPF_PROG(socket_connect, struct socket *sock, struct sockaddr *address, int 
 
     int sock_type = BPF_CORE_READ(sock, type);
     struct sock *sk = BPF_CORE_READ(sock, sk);
+    int ifindex = BPF_CORE_READ(sk, __sk_common.skc_bound_dev_if); // will be 0 unless requested explicitly
 
     sa_family_t family = BPF_CORE_READ(address, sa_family);
 
@@ -36,11 +37,18 @@ int BPF_PROG(socket_connect, struct socket *sock, struct sockaddr *address, int 
         // create a byte view of the IP for printing
         unsigned char *ip = (unsigned char *)&dest_ip;
 
-        bpf_printk("'%s': Connecting to IP: %d.%d.%d.%d Port: %d", comm, ip[0], ip[1], ip[2], ip[3], bpf_ntohs(dest_port));
+        bpf_printk("'%s': Connecting to IP: %d.%d.%d.%d Port: %d from interface: %d", comm, ip[0], ip[1], ip[2], ip[3], bpf_ntohs(dest_port), ifindex);
     }
 
     return 0;
 }
 
 // SEC("lsm/socket_accept")
-// int socket_accept (struct socket *sock, struct socket *newsock) {}
+// int BPF_PROG(socket_accept, struct socket *sock, struct socket *newsock) {
+//     char comm[16];
+//     bpf_get_current_comm(&comm, sizeof(comm));
+
+//     struct sock *sk = BPF_CORE_READ(newsock, sk);
+
+
+// }
